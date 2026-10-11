@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { GraduationCap } from "lucide-react";
 
 const links = [
   { href: "#about",        label: "About" },
@@ -51,14 +52,14 @@ export default function Navbar() {
           target="_blank" rel="noopener noreferrer"
           style={{
             alignItems: "center", gap: 6,
-            fontSize: 13, fontWeight: 500,
+            fontSize: 14.5, fontWeight: 500,
             color: "var(--c-accent)", background: "var(--c-accent-light)",
             padding: "6px 14px", borderRadius: 7, textDecoration: "none",
             transition: "all 0.15s", border: "1px solid #c8dced",
           }}
           className="nav-desktop"
         >
-          🎓 Scholar
+          <GraduationCap size={16} strokeWidth={1.75} /> Scholar
         </a>
 
         {/* Mobile burger */}
@@ -78,7 +79,7 @@ export default function Navbar() {
         }}>
           {links.map((l) => (
             <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
-              style={{ display: "block", padding: "10px 0", fontSize: 15, color: "var(--c-muted)", textDecoration: "none", borderBottom: "1px solid var(--c-divider)" }}>
+              style={{ display: "block", padding: "12px 0", fontSize: 17, color: "var(--c-muted)", textDecoration: "none", borderBottom: "1px solid var(--c-divider)" }}>
               {l.label}
             </a>
           ))}

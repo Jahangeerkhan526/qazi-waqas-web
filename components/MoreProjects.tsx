@@ -3,6 +3,7 @@ import { useState } from "react";
 import { BadgeCheck } from "lucide-react";
 import { projects } from "@/lib/data";
 import { areaMeta, areaOrder } from "./areaMeta";
+import FilterSelect from "./FilterSelect";
 
 export default function MoreProjects() {
   const [area, setArea] = useState("all");
@@ -11,7 +12,18 @@ export default function MoreProjects() {
 
   return (
     <>
-      <div className="chip-row" role="group" aria-label="Filter projects by area">
+      <div className="only-mobile mobile-filters">
+        <FilterSelect
+          label="Area"
+          value={area}
+          onChange={setArea}
+          options={[
+            { value: "all", label: `All projects (${projects.length})` },
+            ...areas.map((a) => ({ value: a, label: `${areaMeta[a].label} (${projects.filter((p) => p.area === a).length})` })),
+          ]}
+        />
+      </div>
+      <div className="chip-row only-desktop" role="group" aria-label="Filter projects by area">
         <button className={`chip${area === "all" ? " is-active" : ""}`} onClick={() => setArea("all")}>
           All <span>{projects.length}</span>
         </button>

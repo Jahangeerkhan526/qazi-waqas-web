@@ -4,6 +4,7 @@ import { ArrowUpRight, Search } from "lucide-react";
 import { publications, profile } from "@/lib/data";
 import Section from "./Section";
 import { areaMeta, areaOrder } from "./areaMeta";
+import FilterSelect from "./FilterSelect";
 
 const PAGE = 10;
 const isMe = (name: string) => /qazi\s+waqas|waqas\s+khan/i.test(name);
@@ -77,10 +78,10 @@ export default function Publications() {
       <div className="pub-toolbar">
         <label className="pub-search">
           <Search size={16} strokeWidth={1.75} />
-          <input type="search" placeholder="Search titles, venues or co-authors"
+          <input type="search" placeholder="Search papers or co-authors"
                  value={query} onChange={(e) => { setQuery(e.target.value); reset(); }} />
         </label>
-        <div className="pub-toggles">
+        <div className="pub-toggles only-desktop">
           <button className={`chip${firstOnly ? " is-active" : ""}`} aria-pressed={firstOnly}
                   onClick={() => { setFirstOnly(!firstOnly); reset(); }}>
             First author <span>{publications.filter((p) => p.firstAuthor).length}</span>
@@ -91,7 +92,31 @@ export default function Publications() {
           </div>
         </div>
       </div>
-      <div className="chip-row" role="group" aria-label="Filter by research area">
+      {/* Phones: one row of dropdowns instead of chips */}
+      <div className="only-mobile mobile-filters">
+        <FilterSelect
+          label="Show"
+          grow={1.5}
+          value={firstOnly ? "first" : area}
+          onChange={(v) => {
+            if (v === "first") { setFirstOnly(true); setArea("all"); }
+            else { setFirstOnly(false); setArea(v); }
+            reset();
+          }}
+          options={[
+            { value: "all", label: `All papers (${publications.length})` },
+            { value: "first", label: `First author (${publications.filter((p) => p.firstAuthor).length})` },
+            ...areaOrder.map((a) => ({ value: a, label: `${areaMeta[a].label} (${publications.filter((p) => p.area === a).length})` })),
+          ]}
+        />
+        <FilterSelect
+          label="Sort"
+          value={sort}
+          onChange={(v) => setSort(v as "newest" | "cited")}
+          options={[{ value: "newest", label: "Newest" }, { value: "cited", label: "Most cited" }]}
+        />
+      </div>
+      <div className="chip-row only-desktop" role="group" aria-label="Filter by research area">
         <button className={`chip${area === "all" ? " is-active" : ""}`} onClick={() => { setArea("all"); reset(); }}>
           All <span>{publications.length}</span>
         </button>
